@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Posts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Msg</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.created_at.strftime("%d/%m/%Y %H:%M") %> - <%= post.msg %></td>
+        <td >
+          <div id="td_<%= post.id %>" style="display: none;">
+            <%#= form_with(model: post, local: true) do |form| %>
+            <form method="post" action="reply_new?parent_id=<%= post.id %>">
+              <input type="text" name="msg">
+              <input type="submit" value="Submit">
+              <%#= form.submit %>
+              <%#= link_to 'Submit', "reply_new?parent_id=" + post.id %>
+            <%# end %>
+          </form>
+          </div>
+          </td>
+          <td><a onclick="showReply('td_<%= post.id %>')">Reply</a></td>
+        <!-- <td><%#= link_to 'Reply', "onclick='(showReply(td_<%= post.id %>))'" %> </td> -->
+        <!-- <td><%#= link_to 'Show', post %></td>
+        <td><%#= link_to 'Edit', edit_post_path(post) %></td> -->
+        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Post', new_post_path %>
+
+<script type="text/javascript">
+  function showReply(td_id){
+    document.getElementById(td_id).style.display = "block";
+  }
+</script>
