@@ -6,7 +6,8 @@ development:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
       # uri: "mongodb://gledson:123456@ds123259.mlab.com:23259/forums"
-      database: forum_development
+      # database: forum_development
+      database: forums
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
@@ -165,7 +166,7 @@ test:
         max_pool_size: 1
 
 production:
-  sessions:
+  clients:
     default:
       uri: "mongodb://gledson:123456@ds123259.mlab.com:23259/forums"
 
