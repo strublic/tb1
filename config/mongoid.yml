@@ -163,3 +163,9 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
+
+production:
+  sessions:
+    default:
+      uri: "mongodb://gledson:123456@ds123259.mlab.com:23259/forums"
+
