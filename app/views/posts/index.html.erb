@@ -11,37 +11,82 @@
   </thead>
 
   <tbody>
-    <% @posts.each do |post| %>
+    <% @posts.where(:parent_id => nil).each do |post| %>
       <tr>
-        <td><%= post.created_at.strftime("%d/%m/%Y %H:%M") %> - <%= post.msg %></td>
-        <td >
+        <td>
+          <%= post.created_at.strftime("%d/%m/%Y %H:%M") %> - <%= post.msg %>
           <div id="td_<%= post.id %>" style="display: none;">
-            <%#= form_with(model: post, local: true) do |form| %>
-            <form method="post" action="reply_new?parent_id=<%= post.id %>">
+            <!-- <form method="post" action="reply_new?parent_id=<%#= post.id %>"> -->
+            <form id="reply-form" name="reply-form" method="post" action="reply_new">
+              <input type="hidden" name="parent_id" value="<%= post.id %>">
               <input type="text" name="msg">
               <input type="submit" value="Submit">
-              <%#= form.submit %>
-              <%#= link_to 'Submit', "reply_new?parent_id=" + post.id %>
-            <%# end %>
-          </form>
+            </form>
           </div>
-          </td>
-          <td><a onclick="showReply('td_<%= post.id %>')">Reply</a></td>
+          <a onclick="showReply('td_<%= post.id %>')">Reply</a>
+          <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+
+          <% if @posts.where(:parent_id => post.id).count > 0 %>
+            <table>
+              <% @posts.where(:parent_id => post.id).each do |reply| %>
+                <tr>
+                  <td>
+                    <%= reply.created_at.strftime("%d/%m/%Y %H:%M") %> - <%= reply.msg %>
+                    <div id="td_<%= reply.id %>" style="display: none;">
+                      <form id="reply-form" name="reply-form" method="post" action="reply_new">
+                        <input type="hidden" name="parent_id" value="<%= reply.id %>">
+                        <input type="text" name="msg">
+                        <input type="submit" value="Submit">
+                      </form>
+                    </div>
+                    <a onclick="showReply('td_<%= reply.id %>')">Reply</a>
+                    <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+                    <% if @posts.where(:parent_id => reply.id).count > 0 %>
+                      <table>
+                        <% @posts.where(:parent_id => reply.id).each do |rereply| %>
+                          <tr>
+                            <td><%= rereply.created_at.strftime("%d/%m/%Y %H:%M") %> - <%= rereply.msg %></td>
+                          </tr>
+                        <% end %>
+                      </table>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          <% end %>
+        </td>
+        
         <!-- <td><%#= link_to 'Reply', "onclick='(showReply(td_<%= post.id %>))'" %> </td> -->
         <!-- <td><%#= link_to 'Show', post %></td>
         <td><%#= link_to 'Edit', edit_post_path(post) %></td> -->
-        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
 <br>
 
 <%= link_to 'New Post', new_post_path %>
+
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 
 <script type="text/javascript">
   function showReply(td_id){
     document.getElementById(td_id).style.display = "block";
   }
+
+  $('#reply-form').on('submit', function(data){
+    var $form = $(data);
+    $.ajax({
+      url     : $form.attr('action'),
+      type    : $form.attr('method'),
+      data    : $form.serialize(),
+      success : function(response) {
+          if (response == false) {
+            alert('could not submit!')
+          }
+        }
+    });
+  });
 </script>
