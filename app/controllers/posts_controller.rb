@@ -5,7 +5,9 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.where(:parent_id => nil).paginate(:page => params[:page], :per_page => 1)
+    @replies = Post.all
+    # @posts = Post.page(params[:page]).per(5) #kaminari
   end
 
   # GET /posts/1
