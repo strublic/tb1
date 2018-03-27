@@ -6,5 +6,6 @@ class Post
 
   field :msg, type: String
   field :parent_id, type: String
+  field :main_parent_id, type: String
 
 end

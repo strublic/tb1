@@ -4,4 +4,6 @@ Rails.application.routes.draw do
 root :to => "posts#index"
 
   post "reply_new" => "posts#reply_new" 
+  post "post_new" => "posts#create" 
+  get "list_reply" => "posts#list_reply" 
 end

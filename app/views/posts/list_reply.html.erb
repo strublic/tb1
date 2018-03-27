@@ -1,0 +1,120 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Postagens</h1>
+<%= link_to 'Ver Postagens', posts_path, :class => "btn blue" %>
+<table id="table-post" class="table-post">
+  <thead>
+    <tr>
+      <th>Mensagens + Respostas</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <section>
+      <% @posts.each do |post| %>
+        <tr>
+          <td>
+            # <small><%= post.created_at.strftime("%d/%m/%Y %H:%M") %></small> - <%= post.msg %>
+
+            <!-- action buttons -->
+              <a class="btns btn" onclick="showReply('td_<%= post.id %>')">Reply</a>
+              <%= link_to 'Deletar', post, method: :delete, :class => "btn", data: { confirm: 'Deseja excluir?' } %>
+
+            <!-- submit box hide -->
+            <div id="td_<%= post.id %>" class="hide-box">
+              <form id="reply-form" name="reply-form" method="post" action="reply_new">
+                <input type="hidden" name="parent_id" value="<%= post.id %>">
+                <input type="text" name="msg">
+                <input class="btn submit" type="submit" value="Submit">
+              </form>
+            </div>
+
+            <!-- replies loop -->
+            <% if @replies.where(:parent_id => post.id).count > 0 %>
+              <table id="table-reply" class="table-reply">
+                <% @replies.where(:parent_id => post.id).each do |reply| %>
+                  <tr>
+                    <td>
+                      |> <small><%= reply.created_at.strftime("%d/%m/%Y %H:%M") %></small> - <%= reply.msg %>
+
+                      <!-- action buttons -->
+                        <a class="btns btn" onclick="showReply('td_<%= reply.id %>')">Reply</a>
+                        <%= link_to 'Deletar', reply, method: :delete, :class => "btn", data: { confirm: 'Deseja excluir?' } %>
+
+                      <!-- submit box hide -->
+                      <div id="td_<%= reply.id %>" class="hide-box">
+                        <form id="reply-form" name="reply-form" method="post" action="reply_new">
+                          <input type="hidden" name="parent_id" value="<%= reply.id %>">
+                          <input type="text" name="msg">
+                          <input class="btn submit" type="submit" value="Submit">
+                        </form>
+                      </div>
+
+                      <!-- re-replies loop -->
+                      <% if @replies.where(:parent_id => reply.id).count > 0 %>
+                        <table id="table-reply" class="table-reply">
+                          <% @replies.where(:parent_id => reply.id).each do |rereply| %>
+                            <tr>
+                              <td>
+                                |> <small><%= rereply.created_at.strftime("%d/%m/%Y %H:%M") %></small> - <%= rereply.msg %>
+
+                                <!-- action buttons -->
+                                <%= link_to 'Deletar', rereply, method: :delete, :class => "btns btn", data: { confirm: 'Deseja excluir?' } %>
+                                </td>
+                            </tr>
+                          <% end %>
+                        </table>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </section>
+  </tbody>
+</table>
+<%= will_paginate @posts %>
+<br>
+
+
+<!-- <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script> -->
+
+<script type="text/javascript">
+  function showReply(td_id){
+    if (document.getElementById(td_id).style.display == "block")
+      document.getElementById(td_id).style.display = "none";
+    else
+      document.getElementById(td_id).style.display = "block";
+  }
+
+  $('#post-form').on('submit', function(data){
+    var $form = $(data);
+    $.ajax({
+      url     : $form.attr('action'),
+      type    : $form.attr('method'),
+      data    : $form.serialize(),
+      success : function(response) {
+          if (response == false) {
+            alert('could not submit!')
+          }
+        }
+    });
+  });
+
+  $('#reply-form').on('submit', function(data){
+    var $form = $(data);
+    $.ajax({
+      url     : $form.attr('action'),
+      type    : $form.attr('method'),
+      data    : $form.serialize(),
+      success : function(response) {
+          if (response == false) {
+            alert('could not submit!')
+          }
+        }
+    });
+  });
+</script>

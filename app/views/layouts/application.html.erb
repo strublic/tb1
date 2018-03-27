@@ -1,14 +1,22 @@
 <!DOCTYPE html>
+
 <html>
   <head>
     <title>Forum</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'jquery-3.2.1.min' %>
   </head>
 
   <body>
     <%= yield %>
+
+  	<footer class="main-footer" >
+    	<span>Projeto <b>Gledson Strublic</b></span>
+	    <div class="pull-right">
+		    Copyright &copy; 2018. Todos os Direitos Reservados.
+		</div>
+    </footer>
   </body>
 </html>
