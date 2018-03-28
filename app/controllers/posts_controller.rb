@@ -3,13 +3,16 @@ class PostsController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => [:create, :reply_new]
 
   def index
-    @posts = Post.where(:parent_id => nil).paginate(:page => params[:page], :per_page => 2)
-    @replies = Post.all
+    self.paginate
   end
 
   def list_reply
-    @posts = Post.where(:parent_id => nil).paginate(:page => params[:page], :per_page => 2)
+    self.paginate
     @replies = Post.all
+  end
+
+  def paginate
+    @posts = Post.where(:parent_id => nil).paginate(:page => params[:page], :per_page => 5)
   end
 
   def show
