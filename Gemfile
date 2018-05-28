@@ -21,6 +21,7 @@ gem "mongoid", ">= 3.1.0"
 gem 'bson_ext'
 gem 'will_paginate_mongoid'
 gem 'will_paginate', '~> 3.1.1'
+gem 'coffee-script-source', '1.8.0'
 
 
 # Use CoffeeScript for .coffee assets and views

@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  resources :posts
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-root :to => "posts#index"
 
-  post "reply_new" => "posts#reply_new" 
-  post "post_new" => "posts#create" 
-  get "list_reply" => "posts#list_reply" 
+	root :to => "locations#index"
+ 	get 'locations/index'
+ 	get 'locations/upload'
+ 	get 'locations/map'
+ 	post 'helpers/upload_csv' => 'helpers#upload_csv'
+
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,0 +1,26 @@
+<% cols = ["ID","Nome"] %>
+<% iterator = @ubs %>
+
+<div class="col-xs-12">
+  <div class="box">
+      <div class="box-body table-responsive">
+          <table class="table table-bordered table-striped table-hover">
+              <thead>
+                  <tr>
+                    <% cols.each do |col| %>
+                        <th><%= col %></th>
+                      <% end %>
+                  </tr>
+              </thead>
+              <tbody>
+                <% iterator.each do |d| %>
+                  <tr>
+                      <td><%= d.id_ubs %></td>
+                      <td><%= d.name %></td>
+                    </tr>
+                  <% end %>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
